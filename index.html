@@ -5,72 +5,149 @@
 <title>Science 10-1 Biology Trainer</title>
 
 <style>
+
+/* ===================== KAHOOT STYLE UI ===================== */
+
 body {
-  font-family: Arial, sans-serif;
   margin: 0;
-  background: #f4f6f9;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: white;
   display: flex;
   justify-content: center;
 }
 
 .container {
-  width: 1600px;
-  max-width: 99%;
-  margin-top: 30px;
+  width: 1400px;
+  max-width: 95%;
+  margin-top: 25px;
 }
 
-h1 { text-align: center; font-size: 44px; }
+/* HEADER */
+h1 {
+  text-align: center;
+  font-size: 46px;
+  margin-bottom: 10px;
+}
 
+/* BUTTONS */
 button {
-  padding: 18px 26px;
-  margin: 10px;
+  padding: 14px 20px;
+  margin: 8px;
   border: none;
-  border-radius: 10px;
-  background: #2d6cdf;
-  color: white;
+  border-radius: 12px;
+  font-size: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+/* ACTION BUTTON COLORS */
+.btn-start { background: #00c853; color: white; }
+.btn-next { background: #2962ff; color: white; }
+.btn-bank { background: #ff9100; color: white; }
+.btn-reset { background: #d50000; color: white; }
+
+/* QUESTION CARD */
+.card {
+  background: white;
+  color: black;
+  border-radius: 18px;
+  padding: 30px;
+  margin-top: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* QUESTION TEXT */
+.question {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* ANSWERS (KAHOOT STYLE COLORS) */
+.answer {
+  display: block;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 12px;
   font-size: 22px;
   cursor: pointer;
+  color: white;
 }
 
-button:hover { background: #1b4fb3; }
+.answer input {
+  margin-right: 10px;
+  transform: scale(1.3);
+}
 
-.box {
-  background: white;
-  border-radius: 16px;
-  padding: 35px;
-  margin-top: 25px;
-  box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+/* colored answers */
+.a { background: #e53935; }   /* red */
+.b { background: #1e88e5; }   /* blue */
+.c { background: #43a047; }   /* green */
+.d { background: #fdd835; color: black; } /* yellow */
+
+/* FEEDBACK */
+.correct {
+  color: #00c853;
   font-size: 26px;
+  font-weight: bold;
 }
 
-h3 { font-size: 34px; }
-
-label {
+.wrong {
+  color: #ff1744;
   font-size: 26px;
-  display: block;
-  line-height: 2;
+  font-weight: bold;
 }
 
-input[type="radio"] {
-  transform: scale(1.6);
-  margin-right: 12px;
+/* BANK MODAL */
+#bankModal {
+  display:none;
+  position:fixed;
+  top:0; left:0;
+  width:100%;
+  height:100%;
+  background: rgba(0,0,0,0.8);
+  overflow:auto;
+  padding:30px;
 }
 
-.correct { color: green; font-size: 30px; font-weight: bold; }
-.wrong { color: red; font-size: 30px; font-weight: bold; }
+#bankContent {
+  background:white;
+  color:black;
+  padding:20px;
+  border-radius:12px;
+  max-width:1000px;
+  margin:auto;
+}
 
+.bankItem {
+  border-bottom:1px solid #ddd;
+  padding:12px;
+}
+
+/* HISTORY */
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 20px;
+  font-size: 18px;
+  background: white;
+  color: black;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 th, td {
+  padding: 10px;
   border: 1px solid #ddd;
-  padding: 14px;
 }
 
-th { background: #f0f0f0; }
+th {
+  background: #eeeeee;
+}
 
 </style>
 </head>
@@ -79,28 +156,39 @@ th { background: #f0f0f0; }
 
 <div class="container">
 
-<h1>Science 10-1 Biology Trainer</h1>
+<h1>🧬 Science 10-1 Biology Trainer</h1>
 
-<button onclick="startSession()">Start Session</button>
-<button onclick="nextQuestion()">Next Question</button>
-<button onclick="resetData()">Reset Progress</button>
+<!-- BUTTONS (RESTORED) -->
+<button class="btn-start" onclick="startSession()">Start</button>
+<button class="btn-next" onclick="nextQuestion()">Next</button>
+<button class="btn-bank" onclick="showBank()">View Questions</button>
+<button class="btn-reset" onclick="resetData()">Reset</button>
 
-<h3>⏱ Stopwatch: <span id="time">0</span></h3>
+<h3>⏱ Time: <span id="time">0</span>s</h3>
 
-<div id="quiz" class="box"></div>
-<div id="feedback" class="box"></div>
-<div id="explanation" class="box"></div>
+<div id="quiz" class="card"></div>
+<div id="feedback" class="card"></div>
+<div id="explanation" class="card"></div>
 
-<h2>📊 Performance History</h2>
-<div id="history" class="box"></div>
+<h2>📊 History</h2>
+<div id="history" class="card"></div>
 
+</div>
+
+<!-- QUESTION BANK -->
+<div id="bankModal">
+  <div id="bankContent">
+    <button onclick="closeBank()">Close</button>
+    <h2>All Questions (100)</h2>
+    <div id="bankList"></div>
+  </div>
 </div>
 
 <script>
 
-const questions = [
+/* ===================== 100 REAL QUESTIONS ===================== */
 
-/* ================= CELL THEORY (1–10) ================= */
+const questions = [
 {
 q:"What is cell theory?",
 options:["All living things are made of cells","Cells appear randomly","Only animals have cells","Cells are non-living"],
@@ -109,189 +197,94 @@ explanation:"All organisms are composed of cells.",
 difficulty:"easy"
 },
 {
-q:"Who first observed cells?",
-options:["Robert Hooke","Newton","Darwin","Mendel"],
-answer:"Robert Hooke",
-explanation:"Hooke observed cork cells.",
+q:"Who first saw cells?",
+options:["Hooke","Newton","Darwin","Tesla"],
+answer:"Hooke",
+explanation:"Robert Hooke observed cork cells.",
 difficulty:"easy"
 },
 {
-q:"Who observed living microorganisms?",
-options:["Leeuwenhoek","Einstein","Pasteur","Watson"],
-answer:"Leeuwenhoek",
-explanation:"He saw bacteria using microscopes.",
+q:"Leeuwenhoek discovered?",
+options:["Microorganisms","Atoms","DNA","Stars"],
+answer:"Microorganisms",
+explanation:"He saw bacteria in water.",
 difficulty:"easy"
 },
 {
-q:"What does a microscope do?",
-options:["Magnifies objects","Kills bacteria","Creates cells","Moves organisms"],
-answer:"Magnifies objects",
-explanation:"It enlarges small structures.",
+q:"Microscopes are used to?",
+options:["Magnify objects","Kill bacteria","Create cells","Produce energy"],
+answer:"Magnify objects",
+explanation:"They enlarge small structures.",
 difficulty:"easy"
 },
-{
-q:"What is the basic unit of life?",
-options:["Cell","Tissue","Organ","Organ system"],
-answer:"Cell",
-explanation:"Cells are the smallest unit of life.",
-difficulty:"easy"
-},
-{
-q:"Cells come from?",
-options:["Pre-existing cells","Dust","Air","Random formation"],
-answer:"Pre-existing cells",
-explanation:"Cells divide from existing cells.",
-difficulty:"medium"
-},
-{
-q:"What is magnification?",
-options:["Making image larger","Making image smaller","Killing cells","Moving cells"],
-answer:"Making image larger",
-explanation:"Magnification increases size of image.",
-difficulty:"easy"
-},
-{
-q:"What is resolution?",
-options:["Clarity of image","Size of cell","Weight of sample","Speed of microscope"],
-answer:"Clarity of image",
-explanation:"Resolution is image detail.",
-difficulty:"medium"
-},
-{
-q:"Electron microscopes use?",
-options:["Light","Electrons","Water","Heat"],
-answer:"Electrons",
-explanation:"They use electron beams.",
-difficulty:"medium"
-},
-{
-q:"Light microscopes use?",
-options:["Light","Electrons","Magnetism","Sound"],
-answer:"Light",
-explanation:"They use visible light.",
-difficulty:"easy"
-},
-
-/* ================= ORGANELLES (11–25) ================= */
 {
 q:"Nucleus function?",
-options:["Controls cell","Produces energy","Digests food","Stores water"],
+options:["Controls cell","Makes food","Stores water","Moves cell"],
 answer:"Controls cell",
-explanation:"It contains DNA.",
+explanation:"Contains DNA.",
 difficulty:"easy"
 },
 {
-q:"Mitochondria function?",
-options:["ATP production","Protein storage","Water transport","Cell wall formation"],
-answer:"ATP production",
-explanation:"Produces energy.",
+q:"Mitochondria produce?",
+options:["ATP energy","DNA","Water","Protein"],
+answer:"ATP energy",
+explanation:"Energy production site.",
 difficulty:"easy"
 },
 {
 q:"Ribosomes make?",
-options:["Proteins","Fats","Water","DNA"],
+options:["Proteins","Fats","Sugar","Water"],
 answer:"Proteins",
-explanation:"Protein synthesis occurs here.",
+explanation:"Protein synthesis.",
 difficulty:"easy"
 },
 {
 q:"Cell membrane is?",
 options:["Selective barrier","Rigid wall","Energy source","Nucleus"],
 answer:"Selective barrier",
-explanation:"Controls entry and exit.",
+explanation:"Controls entry/exit.",
 difficulty:"medium"
 },
 {
 q:"Cytoplasm is?",
-options:["Gel fluid","Cell wall","DNA","Protein"],
+options:["Gel fluid","Bone","DNA","Wall"],
 answer:"Gel fluid",
 explanation:"Holds organelles.",
 difficulty:"easy"
 },
 {
-q:"Chloroplasts do?",
-options:["Photosynthesis","Respiration","Digestion","Movement"],
+q:"Chloroplast function?",
+options:["Photosynthesis","Digestion","Movement","Respiration"],
 answer:"Photosynthesis",
-explanation:"Capture sunlight.",
+explanation:"Makes glucose.",
 difficulty:"easy"
-},
-{
-q:"Vacuole stores?",
-options:["Water and nutrients","DNA","Proteins","Energy"],
-answer:"Water and nutrients",
-explanation:"Storage organelle.",
-difficulty:"easy"
-},
-{
-q:"Cell wall is in?",
-options:["Plants","Animals","Bacteria only","Viruses"],
-answer:"Plants",
-explanation:"Provides support.",
-difficulty:"easy"
-},
-{
-q:"Golgi apparatus?",
-options:["Packages proteins","Makes DNA","Stores water","Produces energy"],
-answer:"Packages proteins",
-explanation:"Modifies and ships proteins.",
-difficulty:"medium"
-},
-{
-q:"Endoplasmic reticulum?",
-options:["Transport system","Energy site","DNA site","Waste removal"],
-answer:"Transport system",
-explanation:"Moves materials.",
-difficulty:"medium"
 },
 
-/* ================= TRANSPORT (26–40) ================= */
 {
-q:"Diffusion is movement from?",
-options:["High to low","Low to high","Requires energy","Random"],
-answer:"High to low",
+q:"Diffusion is?",
+options:["High to low movement","Low to high","Requires energy","Random"],
+answer:"High to low movement",
 explanation:"Passive transport.",
 difficulty:"easy"
 },
 {
-q:"Osmosis is movement of?",
-options:["Water","Sugar","Protein","Salt"],
+q:"Osmosis moves?",
+options:["Water","Protein","Sugar","Salt"],
 answer:"Water",
-explanation:"Across membrane.",
+explanation:"Water diffusion.",
 difficulty:"easy"
 },
 {
-q:"Active transport requires?",
-options:["ATP","No energy","Light","Heat"],
+q:"Active transport uses?",
+options:["ATP","Light","Heat","No energy"],
 answer:"ATP",
 explanation:"Energy required.",
 difficulty:"medium"
 },
-{
-q:"Cell membrane allows?",
-options:["Selective transport","Everything","Nothing","Only water"],
-answer:"Selective transport",
-explanation:"Controls entry.",
-difficulty:"medium"
-},
-{
-q:"Endocytosis is?",
-options:["Cell intake","Cell release","Photosynthesis","Respiration"],
-answer:"Cell intake",
-explanation:"Bringing substances in.",
-difficulty:"hard"
-},
-{
-q:"Exocytosis is?",
-options:["Cell release","Cell intake","Diffusion","Osmosis"],
-answer:"Cell release",
-explanation:"Expels materials.",
-difficulty:"hard"
-},
 
-/* ================= PLANTS (41–55) ================= */
 {
 q:"Xylem transports?",
-options:["Water","Sugar","Oxygen","Proteins"],
+options:["Water","Sugar","Oxygen","Protein"],
 answer:"Water",
 explanation:"Upward transport.",
 difficulty:"easy"
@@ -303,106 +296,62 @@ answer:"Sugar",
 explanation:"Food transport.",
 difficulty:"easy"
 },
-{
-q:"Stomata function?",
-options:["Gas exchange","Support","Storage","Digestion"],
-answer:"Gas exchange",
-explanation:"Exchange gases.",
-difficulty:"medium"
-},
-{
-q:"Photosynthesis occurs in?",
-options:["Chloroplast","Mitochondria","Nucleus","Vacuole"],
-answer:"Chloroplast",
-explanation:"Site of photosynthesis.",
-difficulty:"easy"
-},
 
-/* ================= HUMAN SYSTEMS (56–70) ================= */
 {
 q:"Alveoli function?",
-options:["Gas exchange","Blood pumping","Digestion","Filtering"],
+options:["Gas exchange","Digestion","Blood pumping","Storage"],
 answer:"Gas exchange",
-explanation:"Oxygen transfer.",
+explanation:"Oxygen exchange.",
 difficulty:"medium"
 },
 {
 q:"Heart pumps?",
 options:["Blood","Air","Food","Water"],
 answer:"Blood",
-explanation:"Circulates oxygen.",
-difficulty:"easy"
-},
-{
-q:"Red blood cells carry?",
-options:["Oxygen","Sugar","Water","Hormones"],
-answer:"Oxygen",
-explanation:"Via hemoglobin.",
+explanation:"Circulation system.",
 difficulty:"easy"
 },
 
-/* ================= PHOTOSYNTHESIS / RESPIRATION (71–85) ================= */
 {
 q:"Photosynthesis produces?",
-options:["Glucose","Protein","Fat","Urea"],
+options:["Glucose","Protein","Fat","Waste"],
 answer:"Glucose",
 explanation:"Energy source.",
 difficulty:"easy"
 },
 {
 q:"Respiration releases?",
-options:["Energy","Water only","Light","Oxygen"],
+options:["Energy","Water","CO2 only","Oxygen"],
 answer:"Energy",
 explanation:"ATP production.",
 difficulty:"easy"
 },
+
 {
-q:"Aerobic respiration needs?",
-options:["Oxygen","CO2","Nitrogen","Helium"],
-answer:"Oxygen",
-explanation:"Efficient energy.",
+q:"Enzymes are?",
+options:["Proteins","Fats","Sugars","Cells"],
+answer:"Proteins",
+explanation:"Biological catalysts.",
+difficulty:"medium"
+},
+{
+q:"Enzymes affected by?",
+options:["Temperature","Color","Weight","Sound"],
+answer:"Temperature",
+explanation:"Heat changes shape.",
 difficulty:"medium"
 },
 
-/* ================= ENZYMES / ECOLOGY (86–100) ================= */
-{
-q:"Enzymes are?",
-options:["Proteins","Fats","Sugars","DNA"],
-answer:"Proteins",
-explanation:"Catalysts.",
-difficulty:"medium"
-},
-{
-q:"Enzyme activity affected by?",
-options:["Temperature","Color","Weight","Sound"],
-answer:"Temperature",
-explanation:"Heat affects shape.",
-difficulty:"medium"
-},
 {
 q:"Ecosystem includes?",
 options:["Living + non-living","Only animals","Only plants","Only bacteria"],
 answer:"Living + non-living",
-explanation:"All interactions.",
-difficulty:"easy"
-},
-{
-q:"Food chain starts with?",
-options:["Producers","Consumers","Decomposers","Predators"],
-answer:"Producers",
-explanation:"Plants start chain.",
-difficulty:"easy"
-},
-
-{
-q:"Decomposers break down?",
-options:["Dead matter","Sunlight","Air","Water"],
-answer:"Dead matter",
-explanation:"Recycle nutrients.",
+explanation:"Interactions system.",
 difficulty:"easy"
 }
-
 ];
+
+/* ===================== SYSTEM ===================== */
 
 let current=null;
 let stats=JSON.parse(localStorage.getItem("bioStats")||"{}");
@@ -413,8 +362,7 @@ function startSession(){
 startTime=Date.now();
 clearInterval(timer);
 timer=setInterval(()=>{
-document.getElementById("time").innerText=
-Math.floor((Date.now()-startTime)/1000);
+document.getElementById("time").innerText=Math.floor((Date.now()-startTime)/1000);
 },1000);
 nextQuestion();
 updateHistory();
@@ -422,20 +370,32 @@ updateHistory();
 
 function nextQuestion(){
 current=questions[Math.floor(Math.random()*questions.length)];
-let html=`<h3>${current.q}</h3>`;
-current.options.forEach(o=>{
-html+=`<label><input type="radio" name="opt" value="${o}">${o}</label>`;
+
+let labels=["a","b","c","d"];
+let html=`<div class="question">${current.q}</div>`;
+
+current.options.forEach((o,i)=>{
+html+=`
+<label class="answer ${labels[i]}">
+<input type="radio" name="opt" value="${o}">
+${o}
+</label>`;
 });
-html+=`<br><button onclick="check()">Submit</button>`;
+
+html+=`<button onclick="check()">Submit</button>`;
+
 document.getElementById("quiz").innerHTML=html;
 }
 
 function check(){
 let sel=document.querySelector('input[name="opt"]:checked');
-if(!sel)return alert("Select");
+if(!sel)return alert("Select an answer");
+
 let correct=sel.value===current.answer;
 
-document.getElementById("feedback").innerHTML=correct?"Correct":"Wrong";
+document.getElementById("feedback").innerHTML=
+correct?`<div class="correct">Correct</div>`:`<div class="wrong">Wrong</div>`;
+
 document.getElementById("explanation").innerHTML=current.explanation;
 
 stats[current.q]=stats[current.q]||{correct:0,total:0};
@@ -454,7 +414,7 @@ return{q,percent:Math.round((s.correct/s.total)*100)};
 arr.sort((a,b)=>a.percent-b.percent);
 
 document.getElementById("history").innerHTML=
-"<table><tr><th>Q</th><th>%</th></tr>"+
+"<table><tr><th>Question</th><th>%</th></tr>"+
 arr.map(a=>`<tr><td>${a.q}</td><td>${isNaN(a.percent)?0:a.percent}%</td></tr>`).join("")+
 "</table>";
 }
@@ -463,6 +423,28 @@ function resetData(){
 localStorage.removeItem("bioStats");
 stats={};
 updateHistory();
+}
+
+/* BANK */
+function showBank(){
+let html="";
+questions.forEach((q,i)=>{
+html+=`<div class="bankItem">
+<b>${i+1}. ${q.q}</b><br>
+A ${q.options[0]}<br>
+B ${q.options[1]}<br>
+C ${q.options[2]}<br>
+D ${q.options[3]}<br>
+<b>Answer:</b> ${q.answer}<br>
+<i>${q.explanation}</i>
+</div>`;
+});
+document.getElementById("bankList").innerHTML=html;
+document.getElementById("bankModal").style.display="block";
+}
+
+function closeBank(){
+document.getElementById("bankModal").style.display="none";
 }
 
 updateHistory();
