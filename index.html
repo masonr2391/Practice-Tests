@@ -13,90 +13,102 @@ body {
   justify-content: center;
 }
 
-/* ✅ BIGGER MAIN CONTAINER (uses more screen space) */
+/* 🔥 2X LARGER FULL-WIDTH CONTAINER */
 .container {
-  width: 1200px;
-  max-width: 98%;
-  margin-top: 20px;
+  width: 1600px;
+  max-width: 99%;
+  margin-top: 30px;
 }
 
-/* HEADER */
+/* TITLE BIGGER */
 h1 {
   text-align: center;
-  margin-bottom: 10px;
-  font-size: 32px;
+  margin-bottom: 15px;
+  font-size: 44px;
 }
 
-/* BUTTONS (BIGGER + EASIER TO READ) */
+/* BUTTONS MUCH BIGGER */
 button {
-  padding: 12px 18px;
-  margin: 6px;
+  padding: 18px 26px;
+  margin: 10px;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   background: #2d6cdf;
   color: white;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 22px;
 }
 
 button:hover {
   background: #1b4fb3;
 }
 
-/* CARDS (BIGGER TEXT + MORE SPACE) */
+/* MAIN QUESTION BOX (VERY LARGE) */
 .box {
   background: white;
-  border-radius: 12px;
-  padding: 22px;
-  margin-top: 18px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-  font-size: 18px;
+  border-radius: 16px;
+  padding: 35px;
+  margin-top: 25px;
+  box-shadow: 0 3px 15px rgba(0,0,0,0.10);
+  font-size: 26px;
 }
 
-/* QUESTION TEXT BIGGER */
+/* QUESTION TEXT */
 h3 {
   margin-top: 0;
-  font-size: 22px;
+  font-size: 34px;
 }
 
-/* RADIO OPTIONS BIGGER */
+/* ANSWER OPTIONS HUGE */
 label {
-  font-size: 18px;
-  line-height: 1.8;
+  font-size: 26px;
+  line-height: 2.2;
+  display: block;
 }
 
-/* TABLE */
+/* RADIO BUTTONS BIGGER */
+input[type="radio"] {
+  transform: scale(1.6);
+  margin-right: 12px;
+}
+
+/* FEEDBACK BIG */
+.correct {
+  color: green;
+  font-weight: bold;
+  font-size: 30px;
+}
+
+.wrong {
+  color: red;
+  font-weight: bold;
+  font-size: 30px;
+}
+
+/* TIMER */
+#time {
+  font-size: 28px;
+}
+
+/* TABLE BIGGER */
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 16px;
+  font-size: 20px;
 }
 
 th, td {
   border: 1px solid #ddd;
-  padding: 10px;
+  padding: 14px;
 }
 
 th {
   background: #f0f0f0;
 }
 
-/* FEEDBACK */
-.correct {
-  color: green;
-  font-weight: bold;
-  font-size: 20px;
-}
-
-.wrong {
-  color: red;
-  font-weight: bold;
-  font-size: 20px;
-}
-
-/* TIMER */
-#time {
-  font-size: 20px;
+/* HISTORY TITLE */
+h2 {
+  font-size: 32px;
 }
 
 </style>
@@ -126,7 +138,7 @@ th {
 <script>
 
 // =======================
-// QUESTION BANK (same working set)
+// QUESTION BANK
 // =======================
 const questions = [
   {
@@ -264,10 +276,10 @@ function nextQuestion() {
   let html = `<h3>[${current.difficulty.toUpperCase()}] ${current.q}</h3>`;
 
   opts.forEach(o => {
-    html += `<label><input type="radio" name="opt" value="${o}"> ${o}</label><br>`;
+    html += `<label><input type="radio" name="opt" value="${o}"> ${o}</label>`;
   });
 
-  html += `<br><button onclick="check()">Submit Answer</button>`;
+  html += `<br><br><button onclick="check()">Submit Answer</button>`;
 
   document.getElementById("quiz").innerHTML = html;
 }
