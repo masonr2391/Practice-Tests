@@ -13,10 +13,10 @@ body {
   justify-content: center;
 }
 
-/* MAIN CONTAINER */
+/* ✅ BIGGER MAIN CONTAINER (uses more screen space) */
 .container {
-  width: 900px;
-  max-width: 95%;
+  width: 1200px;
+  max-width: 98%;
   margin-top: 20px;
 }
 
@@ -24,44 +24,57 @@ body {
 h1 {
   text-align: center;
   margin-bottom: 10px;
+  font-size: 32px;
 }
 
-/* BUTTONS */
+/* BUTTONS (BIGGER + EASIER TO READ) */
 button {
-  padding: 10px 14px;
-  margin: 5px;
+  padding: 12px 18px;
+  margin: 6px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   background: #2d6cdf;
   color: white;
   cursor: pointer;
+  font-size: 16px;
 }
 
 button:hover {
   background: #1b4fb3;
 }
 
-/* CARD BOXES */
+/* CARDS (BIGGER TEXT + MORE SPACE) */
 .box {
   background: white;
-  border-radius: 10px;
-  padding: 15px;
-  margin-top: 15px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border-radius: 12px;
+  padding: 22px;
+  margin-top: 18px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  font-size: 18px;
 }
 
-/* TEXT */
-h3 { margin-top: 0; }
+/* QUESTION TEXT BIGGER */
+h3 {
+  margin-top: 0;
+  font-size: 22px;
+}
+
+/* RADIO OPTIONS BIGGER */
+label {
+  font-size: 18px;
+  line-height: 1.8;
+}
 
 /* TABLE */
 table {
   width: 100%;
   border-collapse: collapse;
+  font-size: 16px;
 }
 
 th, td {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 10px;
 }
 
 th {
@@ -69,8 +82,22 @@ th {
 }
 
 /* FEEDBACK */
-.correct { color: green; font-weight: bold; }
-.wrong { color: red; font-weight: bold; }
+.correct {
+  color: green;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.wrong {
+  color: red;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+/* TIMER */
+#time {
+  font-size: 20px;
+}
 
 </style>
 </head>
@@ -99,7 +126,7 @@ th {
 <script>
 
 // =======================
-// QUESTION BANK (REAL SCIENCE 10 BIO CONCEPTS)
+// QUESTION BANK (same working set)
 // =======================
 const questions = [
   {
@@ -168,14 +195,14 @@ const questions = [
     q: "What does xylem transport?",
     options: ["Sugars", "Water", "Oxygen", "CO₂"],
     answer: "Water",
-    explanation: "Xylem transports water and minerals from roots upward.",
+    explanation: "Xylem transports water and minerals upward.",
     difficulty: "easy"
   },
   {
     q: "What does phloem transport?",
     options: ["Water", "Sugars", "Oxygen", "Hormones"],
     answer: "Sugars",
-    explanation: "Phloem distributes glucose made in photosynthesis.",
+    explanation: "Phloem distributes glucose from photosynthesis.",
     difficulty: "easy"
   },
   {
