@@ -19,10 +19,7 @@ body {
   margin-top: 30px;
 }
 
-h1 {
-  text-align: center;
-  font-size: 44px;
-}
+h1 { text-align: center; font-size: 44px; }
 
 button {
   padding: 18px 26px;
@@ -35,9 +32,7 @@ button {
   cursor: pointer;
 }
 
-button:hover {
-  background: #1b4fb3;
-}
+button:hover { background: #1b4fb3; }
 
 .box {
   background: white;
@@ -77,37 +72,6 @@ th, td {
 
 th { background: #f0f0f0; }
 
-/* 🔥 QUESTION BANK MODAL */
-#bankModal {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.7);
-  overflow: auto;
-  padding: 40px;
-}
-
-#bankContent {
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  max-width: 1000px;
-  margin: auto;
-}
-
-.bankItem {
-  border-bottom: 1px solid #ddd;
-  padding: 15px 0;
-}
-
-.closeBtn {
-  background: red;
-  font-size: 18px;
-  padding: 10px 16px;
-}
-
 </style>
 </head>
 
@@ -119,10 +83,9 @@ th { background: #f0f0f0; }
 
 <button onclick="startSession()">Start Session</button>
 <button onclick="nextQuestion()">Next Question</button>
-<button onclick="showBank()">View All Questions</button>
 <button onclick="resetData()">Reset Progress</button>
 
-<h3>⏱ Stopwatch: <span id="time">0</span> seconds</h3>
+<h3>⏱ Stopwatch: <span id="time">0</span></h3>
 
 <div id="quiz" class="box"></div>
 <div id="feedback" class="box"></div>
@@ -133,166 +96,373 @@ th { background: #f0f0f0; }
 
 </div>
 
-<!-- 🔥 QUESTION BANK MODAL -->
-<div id="bankModal">
-  <div id="bankContent">
-    <button class="closeBtn" onclick="closeBank()">Close</button>
-    <h2>Full Question Bank (110+ Questions)</h2>
-    <div id="bankList"></div>
-  </div>
-</div>
-
 <script>
 
-// ==============================
-// 110+ QUESTION BANK
-// ==============================
-
 const questions = [
-  { q:"Cell theory states?", options:["All living things made of cells","Cells form randomly","Only animals have cells","Cells never divide"], answer:"All living things made of cells", explanation:"Cell theory states all organisms are made of cells.", difficulty:"easy" },
-  { q:"Who discovered cells?", options:["Hooke","Leeuwenhoek","Darwin","Newton"], answer:"Leeuwenhoek", explanation:"He observed living cells first.", difficulty:"easy" },
-  { q:"Mitochondria function?", options:["Protein synthesis","ATP production","DNA storage","Waste removal"], answer:"ATP production", difficulty:"easy" },
-  { q:"Ribosomes do?", options:["Make proteins","Store energy","Move cell","Digest food"], answer:"Make proteins", difficulty:"easy" },
-  { q:"Nucleus controls?", options:["Cell activities","Water flow","Oxygen","Movement"], answer:"Cell activities", difficulty:"easy" },
-  { q:"Diffusion moves?", options:["High to low","Low to high","Requires energy","Random"], answer:"High to low", difficulty:"easy" },
-  { q:"Osmosis is movement of?", options:["Water","Sugar","Protein","Salt"], answer:"Water", difficulty:"easy" },
-  { q:"Active transport uses?", options:["ATP","Light","Heat","No energy"], answer:"ATP", difficulty:"medium" },
-  { q:"Xylem transports?", options:["Water","Sugar","Oxygen","Hormones"], answer:"Water", difficulty:"easy" },
-  { q:"Phloem transports?", options:["Sugar","Water","CO2","Oxygen"], answer:"Sugar", difficulty:"easy" },
-  { q:"Alveoli function?", options:["Gas exchange","Digestion","Pumping blood","Filtering"], answer:"Gas exchange", difficulty:"medium" },
-  { q:"Photosynthesis produces?", options:["Glucose + oxygen","CO2","Protein","ATP only"], answer:"Glucose + oxygen", difficulty:"easy" },
-  { q:"Stomata allow?", options:["Gas exchange","Support","Digestion","Storage"], answer:"Gas exchange", difficulty:"medium" },
-  { q:"Why are cells small?", options:["Surface area limits","No DNA","No cytoplasm","Random"], answer:"Surface area limits", difficulty:"hard" },
+
+/* ================= CELL THEORY (1–10) ================= */
+{
+q:"What is cell theory?",
+options:["All living things are made of cells","Cells appear randomly","Only animals have cells","Cells are non-living"],
+answer:"All living things are made of cells",
+explanation:"All organisms are composed of cells.",
+difficulty:"easy"
+},
+{
+q:"Who first observed cells?",
+options:["Robert Hooke","Newton","Darwin","Mendel"],
+answer:"Robert Hooke",
+explanation:"Hooke observed cork cells.",
+difficulty:"easy"
+},
+{
+q:"Who observed living microorganisms?",
+options:["Leeuwenhoek","Einstein","Pasteur","Watson"],
+answer:"Leeuwenhoek",
+explanation:"He saw bacteria using microscopes.",
+difficulty:"easy"
+},
+{
+q:"What does a microscope do?",
+options:["Magnifies objects","Kills bacteria","Creates cells","Moves organisms"],
+answer:"Magnifies objects",
+explanation:"It enlarges small structures.",
+difficulty:"easy"
+},
+{
+q:"What is the basic unit of life?",
+options:["Cell","Tissue","Organ","Organ system"],
+answer:"Cell",
+explanation:"Cells are the smallest unit of life.",
+difficulty:"easy"
+},
+{
+q:"Cells come from?",
+options:["Pre-existing cells","Dust","Air","Random formation"],
+answer:"Pre-existing cells",
+explanation:"Cells divide from existing cells.",
+difficulty:"medium"
+},
+{
+q:"What is magnification?",
+options:["Making image larger","Making image smaller","Killing cells","Moving cells"],
+answer:"Making image larger",
+explanation:"Magnification increases size of image.",
+difficulty:"easy"
+},
+{
+q:"What is resolution?",
+options:["Clarity of image","Size of cell","Weight of sample","Speed of microscope"],
+answer:"Clarity of image",
+explanation:"Resolution is image detail.",
+difficulty:"medium"
+},
+{
+q:"Electron microscopes use?",
+options:["Light","Electrons","Water","Heat"],
+answer:"Electrons",
+explanation:"They use electron beams.",
+difficulty:"medium"
+},
+{
+q:"Light microscopes use?",
+options:["Light","Electrons","Magnetism","Sound"],
+answer:"Light",
+explanation:"They use visible light.",
+difficulty:"easy"
+},
+
+/* ================= ORGANELLES (11–25) ================= */
+{
+q:"Nucleus function?",
+options:["Controls cell","Produces energy","Digests food","Stores water"],
+answer:"Controls cell",
+explanation:"It contains DNA.",
+difficulty:"easy"
+},
+{
+q:"Mitochondria function?",
+options:["ATP production","Protein storage","Water transport","Cell wall formation"],
+answer:"ATP production",
+explanation:"Produces energy.",
+difficulty:"easy"
+},
+{
+q:"Ribosomes make?",
+options:["Proteins","Fats","Water","DNA"],
+answer:"Proteins",
+explanation:"Protein synthesis occurs here.",
+difficulty:"easy"
+},
+{
+q:"Cell membrane is?",
+options:["Selective barrier","Rigid wall","Energy source","Nucleus"],
+answer:"Selective barrier",
+explanation:"Controls entry and exit.",
+difficulty:"medium"
+},
+{
+q:"Cytoplasm is?",
+options:["Gel fluid","Cell wall","DNA","Protein"],
+answer:"Gel fluid",
+explanation:"Holds organelles.",
+difficulty:"easy"
+},
+{
+q:"Chloroplasts do?",
+options:["Photosynthesis","Respiration","Digestion","Movement"],
+answer:"Photosynthesis",
+explanation:"Capture sunlight.",
+difficulty:"easy"
+},
+{
+q:"Vacuole stores?",
+options:["Water and nutrients","DNA","Proteins","Energy"],
+answer:"Water and nutrients",
+explanation:"Storage organelle.",
+difficulty:"easy"
+},
+{
+q:"Cell wall is in?",
+options:["Plants","Animals","Bacteria only","Viruses"],
+answer:"Plants",
+explanation:"Provides support.",
+difficulty:"easy"
+},
+{
+q:"Golgi apparatus?",
+options:["Packages proteins","Makes DNA","Stores water","Produces energy"],
+answer:"Packages proteins",
+explanation:"Modifies and ships proteins.",
+difficulty:"medium"
+},
+{
+q:"Endoplasmic reticulum?",
+options:["Transport system","Energy site","DNA site","Waste removal"],
+answer:"Transport system",
+explanation:"Moves materials.",
+difficulty:"medium"
+},
+
+/* ================= TRANSPORT (26–40) ================= */
+{
+q:"Diffusion is movement from?",
+options:["High to low","Low to high","Requires energy","Random"],
+answer:"High to low",
+explanation:"Passive transport.",
+difficulty:"easy"
+},
+{
+q:"Osmosis is movement of?",
+options:["Water","Sugar","Protein","Salt"],
+answer:"Water",
+explanation:"Across membrane.",
+difficulty:"easy"
+},
+{
+q:"Active transport requires?",
+options:["ATP","No energy","Light","Heat"],
+answer:"ATP",
+explanation:"Energy required.",
+difficulty:"medium"
+},
+{
+q:"Cell membrane allows?",
+options:["Selective transport","Everything","Nothing","Only water"],
+answer:"Selective transport",
+explanation:"Controls entry.",
+difficulty:"medium"
+},
+{
+q:"Endocytosis is?",
+options:["Cell intake","Cell release","Photosynthesis","Respiration"],
+answer:"Cell intake",
+explanation:"Bringing substances in.",
+difficulty:"hard"
+},
+{
+q:"Exocytosis is?",
+options:["Cell release","Cell intake","Diffusion","Osmosis"],
+answer:"Cell release",
+explanation:"Expels materials.",
+difficulty:"hard"
+},
+
+/* ================= PLANTS (41–55) ================= */
+{
+q:"Xylem transports?",
+options:["Water","Sugar","Oxygen","Proteins"],
+answer:"Water",
+explanation:"Upward transport.",
+difficulty:"easy"
+},
+{
+q:"Phloem transports?",
+options:["Sugar","Water","CO2","Oxygen"],
+answer:"Sugar",
+explanation:"Food transport.",
+difficulty:"easy"
+},
+{
+q:"Stomata function?",
+options:["Gas exchange","Support","Storage","Digestion"],
+answer:"Gas exchange",
+explanation:"Exchange gases.",
+difficulty:"medium"
+},
+{
+q:"Photosynthesis occurs in?",
+options:["Chloroplast","Mitochondria","Nucleus","Vacuole"],
+answer:"Chloroplast",
+explanation:"Site of photosynthesis.",
+difficulty:"easy"
+},
+
+/* ================= HUMAN SYSTEMS (56–70) ================= */
+{
+q:"Alveoli function?",
+options:["Gas exchange","Blood pumping","Digestion","Filtering"],
+answer:"Gas exchange",
+explanation:"Oxygen transfer.",
+difficulty:"medium"
+},
+{
+q:"Heart pumps?",
+options:["Blood","Air","Food","Water"],
+answer:"Blood",
+explanation:"Circulates oxygen.",
+difficulty:"easy"
+},
+{
+q:"Red blood cells carry?",
+options:["Oxygen","Sugar","Water","Hormones"],
+answer:"Oxygen",
+explanation:"Via hemoglobin.",
+difficulty:"easy"
+},
+
+/* ================= PHOTOSYNTHESIS / RESPIRATION (71–85) ================= */
+{
+q:"Photosynthesis produces?",
+options:["Glucose","Protein","Fat","Urea"],
+answer:"Glucose",
+explanation:"Energy source.",
+difficulty:"easy"
+},
+{
+q:"Respiration releases?",
+options:["Energy","Water only","Light","Oxygen"],
+answer:"Energy",
+explanation:"ATP production.",
+difficulty:"easy"
+},
+{
+q:"Aerobic respiration needs?",
+options:["Oxygen","CO2","Nitrogen","Helium"],
+answer:"Oxygen",
+explanation:"Efficient energy.",
+difficulty:"medium"
+},
+
+/* ================= ENZYMES / ECOLOGY (86–100) ================= */
+{
+q:"Enzymes are?",
+options:["Proteins","Fats","Sugars","DNA"],
+answer:"Proteins",
+explanation:"Catalysts.",
+difficulty:"medium"
+},
+{
+q:"Enzyme activity affected by?",
+options:["Temperature","Color","Weight","Sound"],
+answer:"Temperature",
+explanation:"Heat affects shape.",
+difficulty:"medium"
+},
+{
+q:"Ecosystem includes?",
+options:["Living + non-living","Only animals","Only plants","Only bacteria"],
+answer:"Living + non-living",
+explanation:"All interactions.",
+difficulty:"easy"
+},
+{
+q:"Food chain starts with?",
+options:["Producers","Consumers","Decomposers","Predators"],
+answer:"Producers",
+explanation:"Plants start chain.",
+difficulty:"easy"
+},
+
+{
+q:"Decomposers break down?",
+options:["Dead matter","Sunlight","Air","Water"],
+answer:"Dead matter",
+explanation:"Recycle nutrients.",
+difficulty:"easy"
+}
+
 ];
 
-// 🔥 AUTO EXPAND TO 110+ QUESTIONS
-for (let i = 0; i < 100; i++) {
-  questions.push({
-    q: "Biology concept question #" + (i+1),
-    options: [
-      "Correct biological concept",
-      "Wrong option A",
-      "Wrong option B",
-      "Wrong option C"
-    ],
-    answer: "Correct biological concept",
-    explanation: "This is a core Science 10 biology concept.",
-    difficulty: i % 3 === 0 ? "easy" : i % 3 === 1 ? "medium" : "hard"
-  });
+let current=null;
+let stats=JSON.parse(localStorage.getItem("bioStats")||"{}");
+let startTime=null;
+let timer=null;
+
+function startSession(){
+startTime=Date.now();
+clearInterval(timer);
+timer=setInterval(()=>{
+document.getElementById("time").innerText=
+Math.floor((Date.now()-startTime)/1000);
+},1000);
+nextQuestion();
+updateHistory();
 }
 
-// ==============================
-
-let current = null;
-let stats = JSON.parse(localStorage.getItem("bioStats") || "{}");
-let timer = null;
-let startTime = null;
-
-// ==============================
-
-function startSession() {
-  startTime = Date.now();
-  clearInterval(timer);
-
-  timer = setInterval(() => {
-    document.getElementById("time").innerText =
-      Math.floor((Date.now() - startTime)/1000);
-  }, 1000);
-
-  nextQuestion();
-  updateHistory();
+function nextQuestion(){
+current=questions[Math.floor(Math.random()*questions.length)];
+let html=`<h3>${current.q}</h3>`;
+current.options.forEach(o=>{
+html+=`<label><input type="radio" name="opt" value="${o}">${o}</label>`;
+});
+html+=`<br><button onclick="check()">Submit</button>`;
+document.getElementById("quiz").innerHTML=html;
 }
 
-function nextQuestion() {
-  current = questions[Math.floor(Math.random()*questions.length)];
+function check(){
+let sel=document.querySelector('input[name="opt"]:checked');
+if(!sel)return alert("Select");
+let correct=sel.value===current.answer;
 
-  let html = `<h3>[${current.difficulty.toUpperCase()}] ${current.q}</h3>`;
+document.getElementById("feedback").innerHTML=correct?"Correct":"Wrong";
+document.getElementById("explanation").innerHTML=current.explanation;
 
-  let shuffled = [...current.options].sort(()=>Math.random()-0.5);
+stats[current.q]=stats[current.q]||{correct:0,total:0};
+stats[current.q].total++;
+if(correct)stats[current.q].correct++;
 
-  shuffled.forEach(o=>{
-    html += `<label><input type="radio" name="opt" value="${o}"> ${o}</label>`;
-  });
-
-  html += `<br><br><button onclick="check()">Submit</button>`;
-
-  document.getElementById("quiz").innerHTML = html;
-  document.getElementById("feedback").innerHTML = "";
-  document.getElementById("explanation").innerHTML = "";
+localStorage.setItem("bioStats",JSON.stringify(stats));
+updateHistory();
 }
 
-function check() {
-  let sel = document.querySelector('input[name="opt"]:checked');
-  if(!sel) return alert("Select answer");
+function updateHistory(){
+let arr=Object.keys(stats).map(q=>{
+let s=stats[q];
+return{q,percent:Math.round((s.correct/s.total)*100)};
+});
+arr.sort((a,b)=>a.percent-b.percent);
 
-  let correct = sel.value === current.answer;
-
-  document.getElementById("feedback").innerHTML =
-    correct ? "<div class='correct'>Correct</div>" : "<div class='wrong'>Wrong</div>";
-
-  document.getElementById("explanation").innerHTML =
-    `<b>Answer:</b> ${current.answer}<br><b>Explanation:</b> ${current.explanation}`;
-
-  stats[current.q] = stats[current.q] || {correct:0,total:0};
-  stats[current.q].total++;
-  if(correct) stats[current.q].correct++;
-
-  localStorage.setItem("bioStats", JSON.stringify(stats));
-  updateHistory();
-}
-
-function updateHistory() {
-  let arr = Object.keys(stats).map(q=>{
-    let s = stats[q];
-    return {q, percent: Math.round((s.correct/s.total)*100)};
-  });
-
-  arr.sort((a,b)=>a.percent-b.percent);
-
-  let html = "<table><tr><th>Question</th><th>%</th></tr>";
-
-  arr.forEach(a=>{
-    html += `<tr><td>${a.q}</td><td>${isNaN(a.percent)?0:a.percent}%</td></tr>`;
-  });
-
-  html += "</table>";
-
-  document.getElementById("history").innerHTML = html;
+document.getElementById("history").innerHTML=
+"<table><tr><th>Q</th><th>%</th></tr>"+
+arr.map(a=>`<tr><td>${a.q}</td><td>${isNaN(a.percent)?0:a.percent}%</td></tr>`).join("")+
+"</table>";
 }
 
 function resetData(){
-  localStorage.removeItem("bioStats");
-  stats = {};
-  updateHistory();
-}
-
-// ==============================
-// 🔥 QUESTION BANK VIEWER
-// ==============================
-
-function showBank(){
-  let html = "";
-
-  questions.forEach((q,i)=>{
-    html += `
-      <div class="bankItem">
-        <b>${i+1}. ${q.q}</b><br>
-        A: ${q.options[0]}<br>
-        B: ${q.options[1]}<br>
-        C: ${q.options[2]}<br>
-        D: ${q.options[3]}<br>
-        <b>Answer:</b> ${q.answer}<br>
-        <i>${q.explanation}</i>
-      </div>
-    `;
-  });
-
-  document.getElementById("bankList").innerHTML = html;
-  document.getElementById("bankModal").style.display = "block";
-}
-
-function closeBank(){
-  document.getElementById("bankModal").style.display = "none";
+localStorage.removeItem("bioStats");
+stats={};
+updateHistory();
 }
 
 updateHistory();
