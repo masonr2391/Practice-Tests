@@ -1,116 +1,238 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Science 10-1 Biology Trainer</title>
-  <style>
-    body { font-family: Arial; margin: 20px; }
-    .box { border: 1px solid #ccc; padding: 15px; margin-top: 10px; }
-    button { padding: 10px; margin: 5px; }
-    .correct { color: green; font-weight: bold; }
-    .wrong { color: red; font-weight: bold; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-  </style>
+<meta charset="UTF-8">
+<title>Science 10-1 Biology Trainer</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f4f6f9;
+  display: flex;
+  justify-content: center;
+}
+
+/* MAIN CONTAINER */
+.container {
+  width: 900px;
+  max-width: 95%;
+  margin-top: 20px;
+}
+
+/* HEADER */
+h1 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* BUTTONS */
+button {
+  padding: 10px 14px;
+  margin: 5px;
+  border: none;
+  border-radius: 6px;
+  background: #2d6cdf;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1b4fb3;
+}
+
+/* CARD BOXES */
+.box {
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  margin-top: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* TEXT */
+h3 { margin-top: 0; }
+
+/* TABLE */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+th {
+  background: #f0f0f0;
+}
+
+/* FEEDBACK */
+.correct { color: green; font-weight: bold; }
+.wrong { color: red; font-weight: bold; }
+
+</style>
 </head>
 
 <body>
 
-<h1>Science 10-1 Biology Trainer (Alberta Curriculum)</h1>
+<div class="container">
+
+<h1>Science 10-1 Biology Trainer (Alberta)</h1>
 
 <button onclick="startSession()">Start Session</button>
-<button onclick="nextQ()">Next Question</button>
+<button onclick="nextQuestion()">Next Question</button>
 <button onclick="resetData()">Reset Progress</button>
 
 <h3>⏱ Stopwatch: <span id="time">0</span> seconds</h3>
 
 <div id="quiz" class="box"></div>
 <div id="feedback" class="box"></div>
-<div id="explain" class="box"></div>
+<div id="explanation" class="box"></div>
 
-<h2>📊 Performance History</h2>
+<h2>📊 Performance History (Worst → Best)</h2>
 <div id="history" class="box"></div>
+
+</div>
 
 <script>
 
-// ===============================
-// 200+ QUESTION BANK (SAMPLE + EXPANDABLE STRUCTURE)
-// Add more by copying format
-// ===============================
-const questions = [];
-
-// EASY (70+ concept basics)
-for (let i = 0; i < 70; i++) {
-  questions.push({
-    q: "Easy Biology Concept #" + (i+1) + ": What is the function of mitochondria?",
-    options: ["Protein synthesis", "Energy production", "Photosynthesis", "Storage"],
-    answer: "Energy production",
-    explanation: "Mitochondria produce ATP through cellular respiration.",
+// =======================
+// QUESTION BANK (REAL SCIENCE 10 BIO CONCEPTS)
+// =======================
+const questions = [
+  {
+    q: "Which statement is part of cell theory?",
+    options: [
+      "Cells form spontaneously",
+      "All living things are made of cells",
+      "Cells do not reproduce",
+      "Only animals have cells"
+    ],
+    answer: "All living things are made of cells",
+    explanation: "Cell theory states all living organisms are composed of cells.",
     difficulty: "easy"
-  });
-}
-
-// MEDIUM (70+ applied)
-for (let i = 0; i < 70; i++) {
-  questions.push({
-    q: "Medium Biology Question #" + (i+1) + ": What process moves water across a membrane?",
-    options: ["Diffusion", "Osmosis", "Active transport", "Respiration"],
-    answer: "Osmosis",
-    explanation: "Osmosis is the movement of water across a selectively permeable membrane.",
+  },
+  {
+    q: "Who first observed living microorganisms?",
+    options: [
+      "Robert Hooke",
+      "Antonie van Leeuwenhoek",
+      "Rudolf Virchow",
+      "Darwin"
+    ],
+    answer: "Antonie van Leeuwenhoek",
+    explanation: "He improved microscopes and observed living cells first.",
+    difficulty: "easy"
+  },
+  {
+    q: "What is the function of mitochondria?",
+    options: [
+      "Protein synthesis",
+      "Energy (ATP) production",
+      "Storage",
+      "Photosynthesis"
+    ],
+    answer: "Energy (ATP) production",
+    explanation: "Mitochondria perform cellular respiration to produce ATP.",
+    difficulty: "easy"
+  },
+  {
+    q: "Diffusion moves particles from:",
+    options: [
+      "Low to high concentration",
+      "High to low concentration",
+      "Requires energy",
+      "Only in plants"
+    ],
+    answer: "High to low concentration",
+    explanation: "Diffusion is passive movement down a concentration gradient.",
+    difficulty: "easy"
+  },
+  {
+    q: "Osmosis refers to movement of:",
+    options: ["Sugar", "Water", "Protein", "Oxygen"],
+    answer: "Water",
+    explanation: "Osmosis is diffusion of water through a membrane.",
+    difficulty: "easy"
+  },
+  {
+    q: "Active transport requires:",
+    options: ["No energy", "ATP energy", "Gravity", "Light"],
+    answer: "ATP energy",
+    explanation: "Active transport uses ATP to move substances against gradient.",
     difficulty: "medium"
-  });
-}
-
-// HARD (60+ reasoning)
-for (let i = 0; i < 60; i++) {
-  questions.push({
-    q: "Hard Biology Scenario #" + (i+1) + ": Why do cells stay small?",
+  },
+  {
+    q: "What does xylem transport?",
+    options: ["Sugars", "Water", "Oxygen", "CO₂"],
+    answer: "Water",
+    explanation: "Xylem transports water and minerals from roots upward.",
+    difficulty: "easy"
+  },
+  {
+    q: "What does phloem transport?",
+    options: ["Water", "Sugars", "Oxygen", "Hormones"],
+    answer: "Sugars",
+    explanation: "Phloem distributes glucose made in photosynthesis.",
+    difficulty: "easy"
+  },
+  {
+    q: "Where does gas exchange occur in lungs?",
+    options: ["Trachea", "Bronchi", "Alveoli", "Heart"],
+    answer: "Alveoli",
+    explanation: "Alveoli are tiny sacs where oxygen enters blood.",
+    difficulty: "medium"
+  },
+  {
+    q: "Why are cells small?",
     options: [
       "They need less DNA",
-      "Surface area to volume ratio limits transport",
+      "Surface area limits transport",
       "They cannot grow",
-      "They lack mitochondria"
+      "They lack cytoplasm"
     ],
-    answer: "Surface area to volume ratio limits transport",
-    explanation: "Large cells cannot exchange materials efficiently because volume grows faster than surface area.",
+    answer: "Surface area limits transport",
+    explanation: "Small cells exchange materials more efficiently.",
     difficulty: "hard"
-  });
-}
+  }
+];
 
-// ===============================
+// =======================
 
 let current = null;
 let score = 0;
 let total = 0;
 let startTime = null;
-let timerInterval = null;
+let timer = null;
 
 let stats = JSON.parse(localStorage.getItem("bioStats") || "{}");
+
+// =======================
 
 function startSession() {
   score = 0;
   total = 0;
   startTime = Date.now();
 
-  clearInterval(timerInterval);
-  timerInterval = setInterval(updateTime, 1000);
+  clearInterval(timer);
+  timer = setInterval(() => {
+    document.getElementById("time").innerText =
+      Math.floor((Date.now() - startTime) / 1000);
+  }, 1000);
 
-  nextQ();
+  nextQuestion();
   updateHistory();
 }
 
-function updateTime() {
-  document.getElementById("time").innerText =
-    Math.floor((Date.now() - startTime) / 1000);
-}
-
-function nextQ() {
+function nextQuestion() {
   document.getElementById("feedback").innerHTML = "";
-  document.getElementById("explain").innerHTML = "";
+  document.getElementById("explanation").innerHTML = "";
 
   current = questions[Math.floor(Math.random() * questions.length)];
 
-  let opts = [...current.options];
-  opts.sort(() => Math.random() - 0.5);
+  let opts = [...current.options].sort(() => Math.random() - 0.5);
 
   let html = `<h3>[${current.difficulty.toUpperCase()}] ${current.q}</h3>`;
 
@@ -118,14 +240,14 @@ function nextQ() {
     html += `<label><input type="radio" name="opt" value="${o}"> ${o}</label><br>`;
   });
 
-  html += `<br><button onclick="check()">Submit</button>`;
+  html += `<br><button onclick="check()">Submit Answer</button>`;
 
   document.getElementById("quiz").innerHTML = html;
 }
 
 function check() {
   let selected = document.querySelector('input[name="opt"]:checked');
-  if (!selected) return alert("Pick an answer!");
+  if (!selected) return alert("Select an answer.");
 
   total++;
 
@@ -137,21 +259,19 @@ function check() {
       "<span class='correct'>Correct</span>";
   } else {
     document.getElementById("feedback").innerHTML =
-      "<span class='wrong'>Wrong</span>";
+      "<span class='wrong'>Incorrect</span>";
   }
 
-  document.getElementById("explain").innerHTML =
+  document.getElementById("explanation").innerHTML =
     `<b>Explanation:</b> ${current.explanation}<br>
      <b>Correct Answer:</b> ${current.answer}`;
 
-  saveStats(current.q, correct);
+  updateStats(current.q, correct);
   updateHistory();
 }
 
-function saveStats(q, correct) {
-  if (!stats[q]) {
-    stats[q] = { correct: 0, total: 0 };
-  }
+function updateStats(q, correct) {
+  if (!stats[q]) stats[q] = { correct: 0, total: 0 };
 
   stats[q].total++;
   if (correct) stats[q].correct++;
@@ -175,7 +295,7 @@ function updateHistory() {
   arr.forEach(a => {
     html += `<tr>
       <td>${a.q}</td>
-      <td>${a.percent || 0}%</td>
+      <td>${isNaN(a.percent) ? 0 : a.percent}%</td>
     </tr>`;
   });
 
